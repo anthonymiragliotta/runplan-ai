@@ -98,11 +98,12 @@ runplan-ai/
 │   │   └── workoutClassification.ts
 │   ├── dates/
 │   │   ├── weekUtils.ts
+│   │   ├── resolveWorkoutDate.ts
 │   │   └── raceCountdown.ts
 │   ├── ai/
-│   │   ├── parserPrompt.ts
-│   │   ├── parserSchema.ts
-│   │   └── normalizeParsedPlan.ts
+│   │   └── parseCommand.ts
+│   ├── plan/
+│   │   └── applyCommand.ts
 │   ├── supabase/
 │   │   ├── client.ts
 │   │   └── server.ts
@@ -114,7 +115,7 @@ runplan-ai/
 │   ├── week.ts
 │   ├── plan.ts
 │   ├── metrics.ts
-│   └── parser.ts
+│   └── commands.ts
 │
 ├── docs/
 │   ├── PRD.md

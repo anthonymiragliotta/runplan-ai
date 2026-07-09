@@ -36,3 +36,4 @@ require.extensions[".ts"] = function loadTs(module, filename) {
 };
 
 require("./weeklyMetrics.test.ts");
+require("./commandExecutor.test.ts");

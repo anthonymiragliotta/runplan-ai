@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import { differenceInCalendarDays, format } from "date-fns";
 import { CalendarDays, Flag, Footprints } from "lucide-react";
 import { DayCard } from "@/components/calendar/DayCard";
@@ -8,12 +8,8 @@ import { WeekNavigator } from "@/components/calendar/WeekNavigator";
 import { WorkoutEditSheet } from "@/components/calendar/WorkoutEditSheet";
 import { getNextWorkout, getWeeklyMileage } from "@/lib/calculations/weeklyMetrics";
 import { addWeeksToDate, getMonday, getWeekDays, getWeekLabel, toIsoDate } from "@/lib/dates/weekUtils";
-import {
-  getStoredWorkoutsSnapshot,
-  saveStoredWorkouts,
-  subscribeToStoredWorkouts,
-} from "@/lib/storage/localWorkouts";
-import { createWorkout, getSampleWorkoutsForWeek } from "@/lib/storage/sampleWorkouts";
+import { useWorkouts } from "@/lib/storage/useWorkouts";
+import { createWorkout } from "@/lib/storage/sampleWorkouts";
 import type { Workout } from "@/types/workout";
 
 const raceDate = new Date("2026-10-11T12:00:00");
@@ -33,18 +29,7 @@ export function WeeklyCalendar() {
   const today = useMemo(() => new Date(), []);
   const currentWeekStart = useMemo(() => getMonday(today), [today]);
   const [weekStart, setWeekStart] = useState(currentWeekStart);
-  const seededWorkouts = useMemo(
-    () =>
-      getSampleWorkoutsForWeek(
-        getWeekDays(currentWeekStart).map((day) => day.isoDate)
-      ),
-    [currentWeekStart]
-  );
-  const workouts = useSyncExternalStore(
-    subscribeToStoredWorkouts,
-    () => getStoredWorkoutsSnapshot(seededWorkouts),
-    () => seededWorkouts
-  );
+  const { workouts, saveWorkouts } = useWorkouts();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
@@ -72,7 +57,7 @@ export function WeeklyCalendar() {
     : null;
 
   function updateWorkouts(nextWorkouts: Workout[]) {
-    saveStoredWorkouts(nextWorkouts);
+    saveWorkouts(nextWorkouts);
   }
 
   function handleSave(workout: Workout) {

@@ -32,7 +32,15 @@ export function isQualityType(workoutType: WorkoutType) {
 }
 
 export function isRunningWorkout(workout: Workout) {
-  return workout.miles > 0 && !workout.isCrossTraining && !workout.isRest;
+  return (
+    workout.miles > 0 &&
+    !workout.isCrossTraining &&
+    !workout.isStrength &&
+    !workout.isRest &&
+    !isCrossTrainingType(workout.workoutType) &&
+    !isStrengthType(workout.workoutType) &&
+    !isRestType(workout.workoutType)
+  );
 }
 
 export function deriveWorkoutFlags(workoutType: WorkoutType, miles: number) {

@@ -1,4 +1,5 @@
 import { parseCommand, ParseCommandError } from "@/lib/ai/parseCommand";
+import { parseQuickCommand } from "@/lib/ai/parseQuickCommand";
 import { getWeekDays, parseIsoDate } from "@/lib/dates/weekUtils";
 import { applyCommand } from "@/lib/plan/applyCommand";
 import type { ParsePlanRequest } from "@/types/commands";
@@ -51,11 +52,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const command = await parseCommand({
-      inputText: parseRequest.inputText,
-      activeWeekStartDate: parseRequest.activeWeekStartDate,
-      activeWeekWorkouts: getActiveWeekWorkouts(parseRequest),
-    });
+    const command =
+      parseQuickCommand({ inputText: parseRequest.inputText }) ??
+      (await parseCommand({
+        inputText: parseRequest.inputText,
+        activeWeekStartDate: parseRequest.activeWeekStartDate,
+        activeWeekWorkouts: getActiveWeekWorkouts(parseRequest),
+      }));
     const preview = applyCommand({
       command,
       activeWeekStartDate: parseRequest.activeWeekStartDate,

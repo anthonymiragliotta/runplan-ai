@@ -36,5 +36,6 @@ require.extensions[".ts"] = function loadTs(module, filename) {
 };
 
 require("./weeklyMetrics.test.ts");
+require("./parseQuickCommand.test.ts");
 require("./commandExecutor.test.ts");
 require("./voiceAutoApply.test.ts");
